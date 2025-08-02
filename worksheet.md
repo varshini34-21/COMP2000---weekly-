@@ -1,8 +1,8 @@
-# Task 0
+# Task 1
 
 Clone this repository (well done!)
 
-# Task 1
+# Task 2
 
 The repository you just cloned is a VSCode project, so lets work with it.  It currently will print "Red vs. Blue" message to the console when run.
 
