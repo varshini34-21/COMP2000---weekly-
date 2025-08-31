@@ -158,3 +158,21 @@ public Optional<Cell> cellAtPoint(Point p)
 🤔 How about we improve the `cellAtColRow` method now we know about optional containers?
 
 🤔 Now that we have `cellAtPoint`, lets use it.  Grow the app window to 1024x720 so we have some clear space to the right of the grid.  In this space, put the details of whatever cell we are hoving over.  For example, you might put the type of cell that is located there, and what it's elevation is.  There are many ways to do this, but one good way is to call `cellAtPoint` while painting the stage and use the resulting cell information.
+
+## Week 6 Application Exercise
+
+Your team's task this week is to explore the use of _exceptions_.  Are there places is the existing code base that could be improved by adding exception handling code, or by creating a custom exception class?  You should ensure your team's code is all up to date so you have the most to work with.  You can take any approach you want and use exception handling and/or custom exception classes for any part of the code you deem appropriate.  Keep in mind what exceptions are intended for as we will be asking ourselved which teams had the most useful exception handling.
+
+We have provided a possible approach via Tasks 13, and 14 if your team wants some direction to head in.
+
+### Task 13
+
+We've added a new class `StageReader` which is used by `Main` to prepare the playing area.  A file is kept in a "data" folder called "stage1.rvb". That file has one line for each configuration item.  We begin with just the character locations.  The format is "ColRow=Actor", where 'Col' is a letter, 'Row' is a one or two digit number, and 'Actor' is a String.
+
+So far `StageReader` simply reads the lines into a `List` of `String` with one line per `List` element.  You should complete the functionality so that this class can read the contents of `data/stage1.rvb` and place an `Actor` at each specified `Grid` location.
+
+Think about the kinds of situations that could lead to an error condition and deal with each using an `Exception`.  This could be simply adding `try/catch` blocks, or require you to implement a custom `Exception` class.
+
+### Task 14
+
+At the moment, the file reading code will thrown an exception if it fails to read a file.  You should change this code so that _it handles a thrown an `IOException`_.  This means you will have to think hard about what to do on a failed file read.
