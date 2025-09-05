@@ -19,6 +19,8 @@ public class Main extends JFrame {
           stage = StageReader.readStage("data/stage1.rvb");
         } catch (IOException e) {
           e.printStackTrace();
+        } catch (FormatException e) {
+          e.printStackTrace();
         }
       }
 
