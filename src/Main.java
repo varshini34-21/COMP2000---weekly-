@@ -15,13 +15,7 @@ public class Main extends JFrame {
       Stage stage = new Stage();
       public Canvas() {
         setPreferredSize(new Dimension(1024, 720));
-        try {
-          stage = StageReader.readStage("data/stage1.rvb");
-        } catch (IOException e) {
-          e.printStackTrace();
-        } catch (FormatException e) {
-          e.printStackTrace();
-        }
+        stage = StageReader.readStage("data/stage1.rvb");
       }
 
       @Override
