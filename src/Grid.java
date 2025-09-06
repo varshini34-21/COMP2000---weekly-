@@ -1,6 +1,11 @@
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public class Grid {
   Cell[][] cells = new Cell[20][20];
@@ -50,5 +55,29 @@ public class Grid {
       }
     }
     return Optional.empty();
+  }
+
+  public List<Cell> getRadius(Cell from, int size) {
+    int i = labelToCol(from.col);
+    int j = from.row;
+    Set<Cell> inRadius = new HashSet<Cell>();
+    if (size > 0) {
+        cellAtColRow(colToLabel(i), j - 1).ifPresent(inRadius::add);
+        cellAtColRow(colToLabel(i), j + 1).ifPresent(inRadius::add);
+        cellAtColRow(colToLabel(i - 1), j).ifPresent(inRadius::add);
+        cellAtColRow(colToLabel(i + 1), j).ifPresent(inRadius::add);
+    }
+
+    for(Cell c: inRadius.toArray(new Cell[0])) {
+        inRadius.addAll(getRadius(c, size - 1));
+    }
+    return new ArrayList<Cell>(inRadius);
+  }
+
+  public void paintOverlay(Graphics g, List<Cell> cells, Color color) {
+    g.setColor(color);
+    for(Cell c: cells) {
+      g.fillRect(c.x+2, c.y+2, c.width-4, c.height-4);
+    }
   }
 }
