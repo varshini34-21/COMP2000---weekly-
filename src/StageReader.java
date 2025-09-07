@@ -58,11 +58,11 @@ public class StageReader {
         // hard-wiring these is definitely a code smell
         // we will see a better way of doing this later
         if(actor.equalsIgnoreCase("bird")) {
-          stage.listOfPlayers.add(new Bird(stage.grid.cellAtColRow(col, row).get(), isBot));
+          stage.addPlayer(new Bird(stage.grid.cellAtColRow(col, row).get(), isBot));
         } else if(actor.equalsIgnoreCase("cat")) {
-          stage.listOfPlayers.add(new Cat(stage.grid.cellAtColRow(col, row).get(), isBot));
+          stage.addPlayer(new Cat(stage.grid.cellAtColRow(col, row).get(), isBot));
         } else if(actor.equalsIgnoreCase("dog")) {
-          stage.listOfPlayers.add(new Dog(stage.grid.cellAtColRow(col, row).get(), isBot));
+          stage.addPlayer(new Dog(stage.grid.cellAtColRow(col, row).get(), isBot));
         } else {
           throw new FormatException(" actor '" + actor + "' unknown.");
         }
@@ -71,9 +71,9 @@ public class StageReader {
       // if any error occurs, create a blank stage and add actors in default locations
       System.out.println("Error reading '" + path + "', creating default stage.");
       stage = new Stage();
-      stage.listOfPlayers.add(new Cat(stage.grid.cellAtColRow(0, 0).get(), false));
-      stage.listOfPlayers.add(new Dog(stage.grid.cellAtColRow(0, 15).get(), true));
-      stage.listOfPlayers.add(new Bird(stage.grid.cellAtColRow(12, 9).get(), true));
+      stage.addPlayer(new Cat(stage.grid.cellAtColRow(0, 0).get(), false));
+      stage.addPlayer(new Dog(stage.grid.cellAtColRow(0, 15).get(), true));
+      stage.addPlayer(new Bird(stage.grid.cellAtColRow(12, 9).get(), true));
     }
     return stage;
   }

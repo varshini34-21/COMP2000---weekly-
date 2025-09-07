@@ -176,3 +176,25 @@ Think about the kinds of situations that could lead to an error condition and de
 ### Task 14
 
 At the moment, the file reading code will thrown an exception if it fails to read a file.  You should change this code so that _it handles a thrown an `IOException`_.  This means you will have to think hard about what to do on a failed file read.
+
+## Week 7 Application Exercise
+
+This week's exercise is one of code comprehension.  We have made changes to the codebase to implement turn-based strategy gameplay in the spirit of famicom-wars.  The first step was to put in the turns!  We've added the following aspects:
+  * Characters on different teams (Humans vs Bots)
+  * A way for the player to move their characters
+  * A way for the computer to move the bot characters.
+  * A simple animation of the bot players to add some dynamism to the game.
+
+### Task 15
+
+Go through the updates to understand what we have done.  I.e. your job for this task is to understand the code we have added rather than adding any code of your own.  I strongly encourage you to explore this commit on github or in VSCode where you can see exactly what lines were added/deleted/modified in making these changes.
+
+### Task 16
+
+So far we've looked at the Stategy Pattern and the Observer Pattern.  Now that you have reviewed the code see if you can recognise where Design Patterns have been used.
+
+  * Which interface, classes, and methods in our game correlate to the elements of the Strategy Pattern:
+    * ![Strategy Pattern Diagram](doc/StrategyPattern.png) ?
+  * Which interface, classes, and methods in our game correlate to the elements of the Obserbver Pattern:
+    * ![Strategy Pattern Diagram](doc/ObserverPattern.png) ?
+

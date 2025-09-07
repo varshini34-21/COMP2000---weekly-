@@ -8,19 +8,28 @@ import java.util.Random;
 
 public class Stage {
   Grid grid;
-  List<Actor> listOfPlayers;
+  private List<Actor> listOfPlayers;
   List<Cell> cellOverlay;
-  Optional<Actor> actorInAction;
+  Optional<Actor> playerInAction;
 
   enum State {ChoosingActor, SelectingNewLocation, BotMoving}
   State currentState;
+  Beat beat;
 
   public Stage() {
     grid = new Grid();
     listOfPlayers = new ArrayList<Actor>();
     cellOverlay = new ArrayList<Cell>();
-    actorInAction = Optional.empty();
+    playerInAction = Optional.empty();
     currentState = State.ChoosingActor;
+    beat = new AnimationBeat();
+  }
+
+  public void addPlayer(Actor player) {
+    listOfPlayers.add(player);
+    if(player.isBot()) {
+      beat.punchIn(player);
+    }
   }
 
   public void paint(Graphics g, Point mouseLoc) {
@@ -42,6 +51,8 @@ public class Stage {
     grid.paint(g, mouseLoc);
     // Blue cell selection overlay with 50% transparency
     grid.paintOverlay(g, cellOverlay, new Color(0f, 0f, 1f, 0.5f));
+
+    beat.ticktock();
     for(Actor player: listOfPlayers) {
       player.paint(g);
     }
@@ -73,11 +84,15 @@ public class Stage {
     for(int i = 0; i < listOfPlayers.size(); i++){
       Actor a = listOfPlayers.get(i);
       yLoc = yLoc + 2*blockVT;
-      g.drawString(a.getClass().toString(), margin, yLoc);
+      g.drawString(a.getClass().getName(), margin, yLoc);
       g.drawString("location:", labelIndent, yLoc+vTab);
       g.drawString(Character.toString(a.loc.col) + Integer.toString(a.loc.row), valueIndent, yLoc+vTab);
       g.drawString("player type:", labelIndent, yLoc+2*vTab);
       g.drawString(a.isBot() ? "Bot" : "Human", valueIndent, yLoc+2*vTab);
+      if(a.isBot() && a.mover != null) {
+        g.drawString("mover:", labelIndent, yLoc+3*vTab);
+        g.drawString(a.mover.getClass().getName(), valueIndent, yLoc+3*vTab);
+      }
     }    
   }
 
@@ -92,11 +107,11 @@ public class Stage {
   public void mouseClicked(int x, int y) {
     switch(currentState) {
       case ChoosingActor:
-        actorInAction = Optional.empty();
+        playerInAction = Optional.empty();
         for(Actor player: listOfPlayers) {
           if(player.loc.contains(x, y) && !player.isBot()) {
             cellOverlay = grid.getRadius(player.loc, player.moves);
-            actorInAction = Optional.of(player);
+            playerInAction = Optional.of(player);
             currentState = State.SelectingNewLocation;
           }
         }
@@ -109,9 +124,9 @@ public class Stage {
           }
         }
         cellOverlay = new ArrayList<Cell>();
-        if(clicked.isPresent() && actorInAction.isPresent()) {
-          actorInAction.get().setLocation(clicked.get());
-          actorInAction.get().turns--;
+        if(clicked.isPresent() && playerInAction.isPresent()) {
+          playerInAction.get().setLocation(clicked.get());
+          playerInAction.get().turns--;
           int humansWithMovesLeft = 0;
           for(Actor player: listOfPlayers) {
             if(!player.isBot() && player.turns > 0) {

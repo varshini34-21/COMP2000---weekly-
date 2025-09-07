@@ -58,6 +58,7 @@ public class Main extends JFrame {
 
     public void run() {
       while(true) {
+        // Re-draw the screen 50 times per second
         Instant startTime = Instant.now();
         repaint();
         Instant endTime = Instant.now();
@@ -65,7 +66,7 @@ public class Main extends JFrame {
         try {
           Thread.sleep(20l - howLong);
         } catch(InterruptedException e) {
-          System.out.println("thread was interrupted, but who cares?");
+          System.out.println("thread was interrupted, nothing to worry about!");
         } catch(IllegalArgumentException e) {
           System.out.println("application can't keep up with framerate");
         }
