@@ -198,3 +198,31 @@ So far we've looked at the Stategy Pattern and the Observer Pattern.  Now that y
   * Which interface, classes, and methods in our game correlate to the elements of the Obserbver Pattern:
     * ![Strategy Pattern Diagram](doc/ObserverPattern.png) ?
 
+## Week 8 Application Exercise
+
+Last week we asked you to identify where design patterns had been implemented.  This week's exercise asks you to identify an opportunity for refactoring using a design pattern and for you and your group to implement that refactoring.
+
+### Task 17
+
+The changes made to `Stage` last week included a declaration that was suggestive of the State Pattern:
+
+```java
+enum State {ChoosingActor, SelectingNewLocation, BotMoving}
+```
+
+Discuss the following questions with your group:
+
+* Does a code component need to be implemented precisely according to the textbook definition to be called a design pattern?
+  * If not, how much of the textbook definition needs to be implemented for you to label something as a particular pattern?
+  * For example, in last week's refactoring if we had left out `BotMover` would we have still implemented the Strategy Pattern, or
+  * If we'd left out one or both of `Beat` and `Pulse` would we have implemented the Observer Pattern?
+
+* How much is enough?  Do the various parts of `Stage` that make use of `enum State` already constitute the State Pattern?
+
+### Task 18
+
+Can you modify `Stage` to fully implement the State Pattern?
+
+![State Pattern Diagram](doc/StatePattern.png)
+
+Hint: you will need to refactor parts of the existing codebase into some new classes and adjust the existing `Stage` class.  Divide the task up so that each member of your group will work on a class each.
