@@ -1,38 +1,30 @@
-import java.awt.Dimension;
-import java.awt.Graphics;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import java.awt.Graphics;
 
-public class Main extends JFrame {
-    public static void main(String[] args) throws Exception {
-      Main window = new Main();
-      window.run();
+public class Main extends JPanel {
+    private Stage stage;
+
+    public Main() {
+      Grid grid = new Grid();
+      stage = new Stage(grid);
+
+      stage.addActor(new Cat(grid.cellAtColRow(2, 2)));
+      stage.addActor(new Dog(grid.cellAtColRow(5, 7)));
+      stage.addActor(new Bird(grid.cellAtColRow(10, 4)));
+  }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        stage.paint(g);
     }
 
-    class Canvas extends JPanel {
-      Stage stage = new Stage();
-      public Canvas() {
-        setPreferredSize(new Dimension(720, 720));
-      }
-
-      @Override
-      public void paint(Graphics g) {
-        stage.paint(g, getMousePosition());
-      }
-    }
-
-    private Main() {
-      this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      Canvas canvas = new Canvas();
-      this.setContentPane(canvas);
-      this.pack();
-      this.setVisible(true);
-    }
-
-    public void run() {
-      while(true) {
-        repaint();
-      }
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("Week 4 Task");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(600, 600);
+        frame.add(new Main());
+        frame.setVisible(true);
     }
 }

@@ -1,23 +1,25 @@
 import java.awt.Graphics;
-import java.awt.Point;
+import java.util.ArrayList;
 
 public class Stage {
-  Grid grid;
-  Actor cat;
-  Actor dog;
-  Actor bird;
+    private Grid grid;
+    private ArrayList<Actor> actors;
 
-  public Stage() {
-    grid = new Grid();
-    cat = new Cat(grid.cellAtColRow(0, 0));
-    dog = new Dog(grid.cellAtColRow(0, 15));
-    bird = new Bird(grid.cellAtColRow(12, 9));
-  }
+    public Stage(Grid grid) {
+        this.grid = grid;
+        this.actors = new ArrayList<>();
+    }
 
-  public void paint(Graphics g, Point mouseLoc) {
-    grid.paint(g, mouseLoc);
-    cat.paint(g);
-    dog.paint(g);
-    bird.paint(g);
-  }
+    public void addActor(Actor actor) {
+        actors.add(actor);
+    }
+
+    public void paint(Graphics g) {
+        grid.paint(g);
+
+        
+        for (Actor actor : actors) {
+            actor.paint(g);
+        }
+    }
 }
