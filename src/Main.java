@@ -1,38 +1,22 @@
-import java.awt.Dimension;
-import java.awt.Graphics;
+import javax.swing.*;
+import java.awt.*;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+public class Main extends JPanel {
+    private Grid grid = new Grid(20, 20, 35, 10);
 
-public class Main extends JFrame {
-    public static void main(String[] args) throws Exception {
-      Main window = new Main();
-      window.run();
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Point mousePos = getMousePosition();
+        grid.paint(g, mousePos);
+        repaint(); // refresh continuously for hover effect
     }
 
-    class Canvas extends JPanel {
-      public Canvas() {
-        setPreferredSize(new Dimension(720, 720));
-      }
-
-      @Override
-      public void paint(Graphics g) {
-	g.setColor(java.awt.Color.BLACK);
-	g.drawRect(10, 10, 700, 700);
-      }
-    }
-
-    private Main() {
-      this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      Canvas canvas = new Canvas();
-      this.setContentPane(canvas);
-      this.pack();
-      this.setVisible(true);
-    }
-
-    public void run() {
-      while(true) {
-        repaint();
-      }
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("Week 3 - Grid");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(720, 720);
+        frame.add(new Main());
+        frame.setVisible(true);
     }
 }
