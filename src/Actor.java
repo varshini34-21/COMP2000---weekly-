@@ -1,20 +1,41 @@
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Polygon;
 import java.util.List;
 
 public abstract class Actor {
-    protected Cell location;
-    protected List<Polygon> shapes;
+  protected Color color;
+  protected Cell loc;
+  protected List<Polygon> display;
 
-    public Actor(Cell location, List<Polygon> shapes) {
-        this.location = location;
-        this.shapes = shapes;
-    }
+  protected Inventory<Item> inventory = new Inventory<>();
 
-    public void paint(Graphics g) {
-        for (Polygon p : shapes) {
-            g.drawPolygon(p);
-            g.fillPolygon(p);
-        }
+  
+  public Actor(Cell loc, Color color, List<Polygon> display) {
+    this.loc = loc;
+    this.color = color;
+    this.display = display;
+  }
+
+  public void paint(Graphics g) {
+    for (Polygon p : display) {
+      g.setColor(color);
+      g.fillPolygon(p);
+      g.setColor(Color.GRAY);
+      g.drawPolygon(p);
     }
+  }
+
+  public void pickUpItems(Cell cell) {
+    for (Item i : cell.collectItems()) {
+      inventory.addItem(i);
+      System.out.println(this.getClass().getSimpleName() + " picked up " + i.getName());
+    }
+  }
+
+  public void useInventory() {
+    if (!inventory.isEmpty()) {
+      inventory.useAll();
+    }
+  }
 }
