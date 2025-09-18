@@ -11,15 +11,18 @@ public class Grid {
         this.cols = cols;
         cells = new Cell[rows][cols];
 
-        // initialize each cell with correct coordinates
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
-                cells[i][j] = new Cell(i * Cell.SIZE, j * Cell.SIZE);
+                int x = i * Cell.SIZE;
+                int y = j * Cell.SIZE;
+
+                if (j == 2) cells[i][j] = new WaterCell(x, y);
+                else if (j == 5) cells[i][j] = new SandCell(x, y);
+                else cells[i][j] = new GrassCell(x, y);
             }
         }
     }
 
-    // Draw all cells in the grid
     public void paint(Graphics g) {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
@@ -28,7 +31,13 @@ public class Grid {
         }
     }
 
-    // Check if a point is inside any cell
+    public Cell getCellAt(int row, int col) {
+        if (row >= 0 && row < rows && col >= 0 && col < cols) {
+            return cells[row][col];
+        }
+        return null;
+    }
+
     public Cell getCellAt(Point p) {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
@@ -38,9 +47,5 @@ public class Grid {
             }
         }
         return null;
-    }
-
-    public Cell[][] getCells() {
-        return cells;
     }
 }

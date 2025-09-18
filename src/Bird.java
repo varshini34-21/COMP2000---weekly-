@@ -3,13 +3,12 @@ import java.awt.Polygon;
 import java.util.ArrayList;
 
 public class Bird extends Actor {
-  public Bird(Cell inLoc) {
-    super(inLoc, Color.GREEN, createShape(inLoc));
-  }
+    public Bird(Cell inLoc) {
+        super(inLoc, Color.GREEN, createShape(inLoc));
+    }
 
-  private static ArrayList<Polygon> createShape(Cell loc) {
-    ArrayList<Polygon> display = new ArrayList<>();
-
+    private static ArrayList<Polygon> createShape(Cell loc) {
+        ArrayList<Polygon> display = new ArrayList<>();
     Polygon wing1 = new Polygon();
     wing1.addPoint(loc.x + 5, loc.y + 5);
     wing1.addPoint(loc.x + 15, loc.y + 17);

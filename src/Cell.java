@@ -7,7 +7,7 @@ import java.util.List;
 public class Cell {
     public int x, y;
     public static final int SIZE = 40;
-    private List<Collectible> items = new ArrayList<>();
+    protected List<Collectible> items = new ArrayList<>();
 
     public Cell(int x, int y) {
         this.x = x;
@@ -24,12 +24,17 @@ public class Cell {
         return temp;
     }
 
-   
     public void paint(Graphics g, Point offset) {
         g.setColor(Color.LIGHT_GRAY);
         g.fillRect(x + offset.x, y + offset.y, SIZE, SIZE);
         g.setColor(Color.BLACK);
         g.drawRect(x + offset.x, y + offset.y, SIZE, SIZE);
+
+        for (Collectible item : items) {
+            if (item instanceof Drawable) {
+                ((Drawable) item).paint(g, x + offset.x, y + offset.y);
+            }
+        }
     }
 
     public boolean contains(Point p) {

@@ -1,21 +1,21 @@
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 public class StageReader {
-    private Stage stage;
-
-    public StageReader(Stage stage) {
-        this.stage = stage;
-    }
-
-    public void printStageInfo() {
-        List<Actor> actors = stage.getActors();
-        Cell[][] grid = stage.getGrid();
-
-        System.out.println("Stage has " + actors.size() + " actors.");
-        for (Actor actor : actors) {
-            System.out.println("- " + actor.getClass().getSimpleName() + " at cell (" + actor.loc.x + "," + actor.loc.y + ")");
+    public static Stage readStage(String filename) {
+        Stage stage = new Stage();
+        try {
+            List<String> lines = Files.readAllLines(Paths.get(filename));
+            System.out.println("Loaded stage file: " + filename);
+            for (String line : lines) {
+                System.out.println(line);
+                
+            }
+        } catch (IOException e) {
+            System.out.println("Stage file not found, using default stage.");
         }
-
-        System.out.println("Grid size: " + grid.length + " x " + grid[0].length);
+        return stage;
     }
 }

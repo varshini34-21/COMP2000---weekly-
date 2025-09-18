@@ -3,12 +3,12 @@ import java.awt.Polygon;
 import java.util.ArrayList;
 
 public class Dog extends Actor {
-  public Dog(Cell inLoc) {
-    super(inLoc, Color.BLUE, createShape(inLoc));
-  }
+    public Dog(Cell inLoc) {
+        super(inLoc, Color.BLUE, createShape(inLoc));
+    }
 
-  private static ArrayList<Polygon> createShape(Cell loc) {
-    ArrayList<Polygon> display = new ArrayList<>();
+    private static ArrayList<Polygon> createShape(Cell loc) {
+        ArrayList<Polygon> display = new ArrayList<>();
 
     Polygon face = new Polygon();
     face.addPoint(loc.x + 8, loc.y + 7);

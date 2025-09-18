@@ -3,13 +3,13 @@ import java.awt.Polygon;
 import java.util.ArrayList;
 
 public class Cat extends Actor {
-  public Cat(Cell inLoc) {
-    super(inLoc, Color.RED, createShape(inLoc));
-  }
+    public Cat(Cell inLoc) {
+        super(inLoc, Color.RED, createShape(inLoc));
+    }
 
-  private static ArrayList<Polygon> createShape(Cell loc) {
-    ArrayList<Polygon> display = new ArrayList<>();
-
+    private static ArrayList<Polygon> createShape(Cell loc) {
+        ArrayList<Polygon> display = new ArrayList<>();
+        
     Polygon face = new Polygon();
     face.addPoint(loc.x + 5, loc.y + 15);
     face.addPoint(loc.x + 29, loc.y + 15);
