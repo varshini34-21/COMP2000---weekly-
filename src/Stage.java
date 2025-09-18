@@ -15,7 +15,7 @@ public class Stage extends JPanel {
         grid = new Cell[gridSize][gridSize];
         for (int i = 0; i < gridSize; i++) {
             for (int j = 0; j < gridSize; j++) {
-                grid[i][j] = new Cell(i * 40, j * 40); 
+                grid[i][j] = new Cell(i * Cell.SIZE, j * Cell.SIZE);
             }
         }
 
@@ -28,7 +28,7 @@ public class Stage extends JPanel {
         actors.add(cat);
         actors.add(bird);
 
-        
+       
         grid[1][1].addItem(new Bone());
         grid[2][2].addItem(new Fish());
         grid[3][3].addItem(new Seed());
@@ -38,7 +38,7 @@ public class Stage extends JPanel {
         cat.pickUpItems(grid[2][2]);
         bird.pickUpItems(grid[3][3]);
 
-        
+       
         dog.showInventory();
         cat.showInventory();
         bird.showInventory();
@@ -48,19 +48,26 @@ public class Stage extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-       
-        int cellSize = 40;
+      
         for (int i = 0; i < gridSize; i++) {
             for (int j = 0; j < gridSize; j++) {
-                g.setColor(Color.LIGHT_GRAY);
-                g.drawRect(i * cellSize, j * cellSize, cellSize, cellSize);
+                grid[i][j].paint(g, new java.awt.Point(0, 0));
             }
         }
 
-       
+      
         for (Actor a : actors) {
             a.paint(g);
         }
+    }
+
+   
+    public List<Actor> getActors() {
+        return actors;
+    }
+
+    public Cell[][] getGrid() {
+        return grid;
     }
 
     public static void main(String[] args) {
