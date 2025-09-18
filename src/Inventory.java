@@ -1,25 +1,41 @@
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
 
-public class Inventory<T extends Item> {
-  private List<T> items = new ArrayList<>();
+public class Inventory<T extends Collectible> {
+    private List<T> items;
 
-  public void addItem(T item) {
-    items.add(item);
-  }
-
-  public void useAll() {
-    for (T item : items) {
-      item.use();
+    public Inventory() {
+        items = new ArrayList<>();
     }
-    items.clear();
-  }
 
-  public boolean isEmpty() {
-    return items.isEmpty();
-  }
+    public void addItem(T item) {
+        items.add(item);
+    }
 
-  public List<T> getItems() {
-    return items;
-  }
+    public boolean isEmpty() {
+        return items.isEmpty();
+    }
+
+    public void showItems() {
+        if (items.isEmpty()) {
+            System.out.println("Inventory is empty.");
+        } else {
+            System.out.println("Inventory contains:");
+            for (T item : items) {
+                System.out.println("- " + item.getName());
+            }
+        }
+    }
+
+    public void useAll() {
+        if (items.isEmpty()) {
+            System.out.println("Nothing to use.");
+            return;
+        }
+        for (T item : items) {
+            System.out.print("Using " + item.getName() + ": ");
+            item.use();  
+        }
+        items.clear();
+    }
 }
