@@ -12,10 +12,9 @@ public class Fish implements Collectible, Drawable {
       System.out.println("MEOW");
   }
   public void paint(Graphics g, int x, int y) {
-    g.setColor(Color.ORANGE);
-    g.fillOval(x + 10, y + 10, 20, 10);
-    g.setColor(Color.BLACK);
-    g.drawLine(x + 25, y + 15, x + 30, y + 10);
-    g.drawLine(x + 25, y + 15, x + 30, y + 20);
-}
+        g.setColor(Color.ORANGE);
+        g.fillOval(x + 10, y + 10, 12, 8); // oval body
+        g.setColor(Color.BLACK);
+        g.drawOval(x + 10, y + 10, 12, 8);
+    }
 }

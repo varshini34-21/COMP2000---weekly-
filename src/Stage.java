@@ -5,6 +5,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import javax.swing.JPanel;
 
 public class Stage extends JPanel implements MouseListener {
@@ -12,112 +13,71 @@ public class Stage extends JPanel implements MouseListener {
     private List<Actor> actors = new ArrayList<>();
     private Actor selectedActor = null;
     private List<Cell> highlightedCells = new ArrayList<>();
+    private Point mousePos = new Point(0, 0);
 
     public Stage() {
-        grid = new Grid(10, 10);
+        grid = new Grid(); 
         this.addMouseListener(this);
 
         
-        Dog dog = new Dog(grid.getCellAt(1, 1));
-        Cat cat = new Cat(grid.getCellAt(2, 2));
-        Bird bird = new Bird(grid.getCellAt(3, 3));
+        Dog dog = new Dog(grid.cellAtColRow('B', 2).get());
+        Cat cat = new Cat(grid.cellAtColRow('F', 5).get());
+        Bird bird = new Bird(grid.cellAtColRow('J', 10).get());
 
         actors.add(dog);
         actors.add(cat);
         actors.add(bird);
 
-        
-        grid.getCellAt(4, 4).addItem(new Bone());
-        grid.getCellAt(5, 5).addItem(new Fish());
-        grid.getCellAt(6, 6).addItem(new Seed());
+       
+        grid.cellAtColRow('C', 3).get().addItem(new Bone());
+        grid.cellAtColRow('G', 7).get().addItem(new Fish());
+        grid.cellAtColRow('L', 12).get().addItem(new Seed());
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-       
-        grid.paint(g);
-
-        
-        g.setColor(new Color(0, 0, 255, 100));
-        for (Cell c : highlightedCells) {
-            g.fillRect(c.x, c.y, Cell.SIZE, Cell.SIZE);
-        }
-
       
+        grid.paint(g, mousePos);
+
+     
+        grid.paintOverlay(g, highlightedCells, new Color(0, 0, 255, 100));
+
         for (Actor a : actors) {
             a.paint(g);
-        }
-
-       
-        int infoX = 450;
-        int y = 30;
-        g.setColor(Color.BLACK);
-        g.drawString("=== GAME INFO ===", infoX, y);
-        y += 20;
-
-        for (Actor a : actors) {
-            g.drawString(a.getClass().getSimpleName(), infoX, y);
-            y += 15;
-            g.drawString("Location: (" + a.loc.x/Cell.SIZE + "," + a.loc.y/Cell.SIZE + ")", infoX+10, y);
-            y += 15;
-            g.drawString("Inventory:", infoX+10, y);
-            y += 15;
-
-            if (a.inventory.isEmpty()) {
-                g.drawString("- Empty", infoX+20, y);
-                y += 15;
-            } else {
-                for (Collectible item : a.inventory.getItems()) {
-                    g.drawString("- " + item.getName(), infoX+20, y);
-                    y += 15;
-                }
-            }
-            y += 20;
         }
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
         Point p = e.getPoint();
-        Cell clicked = grid.getCellAt(p);
+        Optional<Cell> clickedOpt = grid.cellAtPoint(p);
 
-        if (clicked == null) return;
+        if (clickedOpt.isEmpty()) return;
+        Cell clicked = clickedOpt.get();
 
         if (selectedActor == null) {
             
             for (Actor a : actors) {
-                if (clicked.contains(new Point(a.loc.x, a.loc.y))) {
+                if (a.loc == clicked) {
                     selectedActor = a;
-                    highlightedCells = getMoveOptions(clicked);
+                    highlightedCells = grid.getRadius(clicked, 2); 
                     repaint();
                     return;
                 }
             }
         } else {
-            
+           
             if (highlightedCells.contains(clicked)) {
                 selectedActor.loc = clicked;
                 selectedActor.pickUpItems(clicked);
             }
+            
             selectedActor = null;
             highlightedCells.clear();
             repaint();
         }
-    }
-
-    private List<Cell> getMoveOptions(Cell from) {
-        List<Cell> moves = new ArrayList<>();
-        int[][] dirs = { {1,0}, {-1,0}, {0,1}, {0,-1} };
-        int fromRow = from.x / Cell.SIZE;
-        int fromCol = from.y / Cell.SIZE;
-
-        for (int[] d : dirs) {
-            Cell c = grid.getCellAt(fromRow + d[0], fromCol + d[1]);
-            if (c != null) moves.add(c);
-        }
-        return moves;
     }
 
     

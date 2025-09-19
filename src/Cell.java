@@ -1,44 +1,72 @@
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Cell {
-    public int x, y;
-    public static final int SIZE = 40;
-    protected List<Collectible> items = new ArrayList<>();
+public class Cell extends Rectangle {
+    public static int size = 35;  
+    char col;
+    int row;
 
-    public Cell(int x, int y) {
-        this.x = x;
-        this.y = y;
+   
+    private List<Collectible> items = new ArrayList<>();
+
+    public Cell(char inCol, int inRow, int x, int y) {
+        super(x, y, size, size);
+        this.col = inCol;
+        this.row = inRow;
     }
 
+    
+    public void paint(Graphics g, Point mousePos) {
+        if (contains(mousePos)) {
+            g.setColor(Color.GRAY);
+        } else {
+            g.setColor(Color.WHITE);
+        }
+        g.fillRect(x, y, size, size);
+        g.setColor(Color.BLACK);
+        g.drawRect(x, y, size, size);
+
+        // Draw items if any
+        for (Collectible item : getItems()) {
+            if (item instanceof Drawable) {
+                ((Drawable) item).paint(g, x, y);
+            }
+        }
+    }
+
+    @Override
+    public boolean contains(Point p) {
+        if (p != null) {
+            return super.contains(p);
+        } else {
+            return false;
+        }
+    }
+
+    public int leftOfComparison(Cell c) {
+        return Integer.compare(col, c.col);
+    }
+
+    public int aboveComparison(Cell c) {
+        return Integer.compare(row, c.row);
+    }
+
+    
     public void addItem(Collectible item) {
         items.add(item);
     }
 
     public List<Collectible> collectItems() {
-        List<Collectible> temp = new ArrayList<>(items);
+        List<Collectible> copy = new ArrayList<>(items);
         items.clear();
-        return temp;
+        return copy;
     }
 
-    public void paint(Graphics g, Point offset) {
-        g.setColor(Color.LIGHT_GRAY);
-        g.fillRect(x + offset.x, y + offset.y, SIZE, SIZE);
-        g.setColor(Color.BLACK);
-        g.drawRect(x + offset.x, y + offset.y, SIZE, SIZE);
-
-        for (Collectible item : items) {
-            if (item instanceof Drawable) {
-                ((Drawable) item).paint(g, x + offset.x, y + offset.y);
-            }
-        }
-    }
-
-    public boolean contains(Point p) {
-        return p.x >= x && p.x < x + SIZE &&
-               p.y >= y && p.y < y + SIZE;
+    public List<Collectible> getItems() {
+        return items;
     }
 }
