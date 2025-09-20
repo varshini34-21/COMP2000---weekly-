@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Bird extends Actor {
     public Bird(Cell inLoc) {
-        super(inLoc, Color.GREEN, createShape(inLoc));
+        super(inLoc, Color.YELLOW, createShape(inLoc));
     }
 
     private static ArrayList<Polygon> createShape(Cell loc) {

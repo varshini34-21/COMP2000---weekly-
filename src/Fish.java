@@ -13,14 +13,28 @@ public class Fish implements Collectible, Drawable {
       System.out.println("MEOW");
   }
   public void paint(Graphics g, int x, int y) {
-    g.setColor(Color.MAGENTA);
-    Polygon drop = new Polygon();
-    drop.addPoint(x + 17, y + 10);
-    drop.addPoint(x + 20, y + 18);
-    drop.addPoint(x + 14, y + 18);
-    g.fillPolygon(drop);
+    g.setColor(Color.PINK);
+    Polygon body = new Polygon();
+        body.addPoint(x + 5,  y + 15);
+        body.addPoint(x + 15, y + 10);
+        body.addPoint(x + 25, y + 10);
+        body.addPoint(x + 35, y + 15);
+        body.addPoint(x + 25, y + 20);
+        body.addPoint(x + 15, y + 20);
+        g.fillPolygon(body);
+        Polygon tail = new Polygon();
+        tail.addPoint(x + 35, y + 15);
+        tail.addPoint(x + 45, y + 10);
+        tail.addPoint(x + 45, y + 20);
+        g.fillPolygon(tail);
 
-    g.setColor(Color.BLACK);
-    g.drawPolygon(drop);
+        g.setColor(Color.BLACK);
+        g.drawPolygon(body);
+        g.drawPolygon(tail);
+
+        g.setColor(Color.WHITE);
+        g.fillOval(x + 8, y + 13, 4, 4);
+        g.setColor(Color.BLACK);
+        g.fillOval(x + 9, y + 14, 2, 2);
 }
 }

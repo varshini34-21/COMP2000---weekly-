@@ -12,7 +12,7 @@ public class Seed implements Collectible, Drawable {
       System.out.println("PECK PECK PECK");
   }
   public void paint(Graphics g, int x, int y) {
-    g.setColor(Color.MAGENTA);
+    g.setColor(Color.ORANGE);
     g.fillOval(x + 14, y + 14, 6, 6); 
     g.setColor(Color.BLACK);
     g.drawOval(x + 14, y + 14, 6, 6);

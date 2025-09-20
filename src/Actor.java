@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Actor {
-    protected Cell loc;                 // current cell
-    protected Color color;              // actor color
-    protected List<Polygon> display;    // polygons that make up the actor
+    protected Cell loc;                
+    protected Color color;              
+    protected List<Polygon> display;    
 
     
     public Actor(Cell inLoc, Color color, ArrayList<Polygon> display) {
@@ -21,9 +21,9 @@ public abstract class Actor {
         if (display != null) {
             for (Polygon p : display) {
                 g.setColor(color);
-                g.fillPolygon(p);       // fill
+                g.fillPolygon(p);       
                 g.setColor(Color.BLACK);
-                g.drawPolygon(p);       // outline
+                g.drawPolygon(p);       
             }
         }
     }
