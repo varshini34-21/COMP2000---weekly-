@@ -10,7 +10,6 @@ public class Cell extends Rectangle {
     char col;
     int row;
 
-   
     private List<Collectible> items = new ArrayList<>();
 
     public Cell(char inCol, int inRow, int x, int y) {
@@ -19,7 +18,6 @@ public class Cell extends Rectangle {
         this.row = inRow;
     }
 
-    
     public void paint(Graphics g, Point mousePos) {
         if (contains(mousePos)) {
             g.setColor(Color.GRAY);
@@ -30,7 +28,7 @@ public class Cell extends Rectangle {
         g.setColor(Color.BLACK);
         g.drawRect(x, y, size, size);
 
-        // Draw items if any
+       
         for (Collectible item : getItems()) {
             if (item instanceof Drawable) {
                 ((Drawable) item).paint(g, x, y);
@@ -55,7 +53,6 @@ public class Cell extends Rectangle {
         return Integer.compare(row, c.row);
     }
 
-    
     public void addItem(Collectible item) {
         items.add(item);
     }
@@ -68,5 +65,13 @@ public class Cell extends Rectangle {
 
     public List<Collectible> getItems() {
         return items;
+    }
+
+   
+    public void pickUpBy(Actor actor) {
+        List<Collectible> pickedUp = collectItems();
+        for (Collectible item : pickedUp) {
+            actor.pickUp(item);  
+        }
     }
 }
