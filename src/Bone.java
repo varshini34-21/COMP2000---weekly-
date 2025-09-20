@@ -13,9 +13,16 @@ public class Bone implements Collectible, Drawable {
   }
   public void paint(Graphics g, int x, int y) {
     g.setColor(Color.WHITE);
-    g.fillRect(x + 10, y + 10, 10, 5); 
+    // middle rectangle
+    g.fillRect(x + 12, y + 14, 10, 6);
+    // circles at ends
+    g.fillOval(x + 8, y + 12, 6, 10);
+    g.fillOval(x + 20, y + 12, 6, 10);
+
     g.setColor(Color.BLACK);
-    g.drawRect(x + 10, y + 10, 10, 5);
+    g.drawRect(x + 12, y + 14, 10, 6);
+    g.drawOval(x + 8, y + 12, 6, 10);
+    g.drawOval(x + 20, y + 12, 6, 10);
+} 
 }
-  }
 

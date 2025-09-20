@@ -1,88 +1,104 @@
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import javax.swing.JPanel;
 
-public class Stage extends JPanel implements MouseListener {
-    private Grid grid;
-    private List<Actor> actors = new ArrayList<>();
-    private Actor selectedActor = null;
-    private List<Cell> highlightedCells = new ArrayList<>();
-    private Point mousePos = new Point(0, 0);
+public class Stage {
+    Grid grid;
+    private List<Actor> listOfPlayers;
+    List<Cell> cellOverlay;
+    Optional<Actor> playerInAction;
+
+    enum State {ChoosingActor, SelectingNewLocation}
+    State currentState;
 
     public Stage() {
-        grid = new Grid(); 
-        this.addMouseListener(this);
+        grid = new Grid();
+        listOfPlayers = new ArrayList<>();
+        cellOverlay = new ArrayList<>();
+        playerInAction = Optional.empty();
+        currentState = State.ChoosingActor;
 
-        
+        // Add your players
         Dog dog = new Dog(grid.cellAtColRow('B', 2).get());
         Cat cat = new Cat(grid.cellAtColRow('F', 5).get());
         Bird bird = new Bird(grid.cellAtColRow('J', 10).get());
 
-        actors.add(dog);
-        actors.add(cat);
-        actors.add(bird);
+        listOfPlayers.add(dog);
+        listOfPlayers.add(cat);
+        listOfPlayers.add(bird);
 
-       
+        // Add some items
         grid.cellAtColRow('C', 3).get().addItem(new Bone());
         grid.cellAtColRow('G', 7).get().addItem(new Fish());
         grid.cellAtColRow('L', 12).get().addItem(new Seed());
     }
 
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
+    public void paint(Graphics g, Point mouseLoc) {
+        // Draw grid
+        grid.paint(g, mouseLoc);
 
-      
-        grid.paint(g, mousePos);
+        // Blue overlay highlight
+        grid.paintOverlay(g, cellOverlay, new Color(0f, 0f, 1f, 0.5f));
 
-     
-        grid.paintOverlay(g, highlightedCells, new Color(0, 0, 255, 100));
-
-        for (Actor a : actors) {
-            a.paint(g);
+        // Draw players
+        for (Actor player : listOfPlayers) {
+            player.paint(g);
         }
     }
 
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        Point p = e.getPoint();
-        Optional<Cell> clickedOpt = grid.cellAtPoint(p);
+    public List<Cell> getClearRadius(Cell from, int size) {
+        List<Cell> init = grid.getRadius(from, size);
+        for (Actor player : listOfPlayers) {
+            init.remove(player.loc); // don’t allow overlap
+        }
+        return init;
+    }
 
-        if (clickedOpt.isEmpty()) return;
-        Cell clicked = clickedOpt.get();
-
-        if (selectedActor == null) {
-            
-            for (Actor a : actors) {
-                if (a.loc == clicked) {
-                    selectedActor = a;
-                    highlightedCells = grid.getRadius(clicked, 2); 
-                    repaint();
-                    return;
+    public void mouseClicked(int x, int y) {
+        switch (currentState) {
+            case ChoosingActor:
+                playerInAction = Optional.empty();
+                for (Actor player : listOfPlayers) {
+                    if (player.loc.contains(new Point(x, y))) {
+                        // highlight movement radius (2 steps)
+                        cellOverlay = grid.getRadius(player.loc, 2);
+                        playerInAction = Optional.of(player);
+                        currentState = State.SelectingNewLocation;
+                    }
                 }
-            }
-        } else {
-           
-            if (highlightedCells.contains(clicked)) {
-                selectedActor.loc = clicked;
-                selectedActor.pickUpItems(clicked);
-            }
-            
-            selectedActor = null;
-            highlightedCells.clear();
-            repaint();
+                break;
+
+            case SelectingNewLocation:
+                Optional<Cell> clicked = Optional.empty();
+                for (Cell c : cellOverlay) {
+                    if (c.contains(new Point(x, y))) {
+                        clicked = Optional.of(c);
+                    }
+                }
+                cellOverlay = new ArrayList<>();
+                if (clicked.isPresent() && playerInAction.isPresent()) {
+                    Cell moveTo = clicked.get();
+                    Actor actor = playerInAction.get();
+
+                    // Terrain rules: only Bird can enter water
+                    if (moveTo instanceof EnterRule) {
+                        if (!((EnterRule) moveTo).canEnter(actor)) {
+                            System.out.println(actor.getClass().getSimpleName() + " cannot enter here.");
+                            currentState = State.ChoosingActor;
+                            return;
+                        }
+                    }
+
+                    // Move actor
+                    actor.loc = moveTo;
+                    actor.updateShape();
+                    actor.pickUpItems(moveTo);
+                }
+                currentState = State.ChoosingActor;
+                break;
         }
     }
-
-    
-    public void mousePressed(MouseEvent e) {}
-    public void mouseReleased(MouseEvent e) {}
-    public void mouseEntered(MouseEvent e) {}
-    public void mouseExited(MouseEvent e) {}
 }

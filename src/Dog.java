@@ -31,4 +31,9 @@ public class Dog extends Actor {
 
         return display;
     }
+
+    @Override
+    public void updateShape() {
+        this.display = createShape(loc);
+    }
 }

@@ -15,6 +15,7 @@ public abstract class Actor {
         this.display = display;
     }
 
+   
     public void paint(Graphics g) {
         for (Polygon p : display) {
             g.setColor(color);
@@ -24,6 +25,10 @@ public abstract class Actor {
         }
     }
 
+    
+    public abstract void updateShape();
+
+    
     public void pickUpItems(Cell cell) {
         for (Collectible i : cell.collectItems()) {
             inventory.addItem(i);
